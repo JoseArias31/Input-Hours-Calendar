@@ -1,0 +1,19 @@
+.small-input{
+    width: 50px;
+
+}
+
+#form{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+   gap: 100px;
+   
+}
+
+#h3{
+    margin-top: 50px;
+    
+    text-align: center;
+}
