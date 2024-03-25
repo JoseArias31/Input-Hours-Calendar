@@ -54,7 +54,6 @@ const App = () => {
     // Manejar la lógica de envío de datos si es necesario
   };
 
-  const length = 22;
 
   const initialHours = {
     '131 Bermondsay Rd': '8',
@@ -85,22 +84,29 @@ const App = () => {
       {addresses.map((address) => (
         <div key={address}>
             <h3 id='h3'>{address}</h3>
+           <div id='horasYDias'>
+            <div>
           <label htmlFor={`row1-col1`}>Hora por Oficina:</label>
           <input
             type="text"
             id={`row1-col1`}
             value={hours[address]}
-            className="small-input"
+            className="small-input2"
             onChange={(e) => {
               handleHourChange(address, e.target.value);
             }} />
+            </div>
+            <div>
           <label htmlFor={`days-worked-${address}`}>Dias trabajados:</label>
           <input
             type="number" // Cambia el tipo a number para facilitar el ingreso de valores numéricos
             id={`days-worked-${address}`}
+            className='small-input2'
             value={daysWorked}
             onChange={(e) => setDaysWorked(Number(e.target.value))} // Asegúrate de convertir el valor a Number
           />
+          </div>
+          </div>
           {Array.from({ length: daysWorked }, (_, recordIndex) => ( // Usa daysWorked para determinar el número de filas
             <RecordForm
               key={`${address}-${recordIndex}`}

@@ -3,6 +3,12 @@
 
 }
 
+.horasYDias{
+display: flex;
+flex-direction: column;
+
+}
+
 #form{
     display: flex;
     flex-direction: row;
@@ -13,7 +19,11 @@
 }
 
 #h3{
-    margin-top: 50px;
-    
-    text-align: center;
+      text-align: center;
+      margin-bottom: 0;
+}
+
+.small-input2{
+    width: 30px;
+
 }
