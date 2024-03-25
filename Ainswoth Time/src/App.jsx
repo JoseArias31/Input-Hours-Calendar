@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
+
+
 const RecordForm = ({ address, recordIndex, onSubmit, initialHours, onHourChange }) => {
   const [formData, setFormData] = useState({ dia: '', fecha: '', hours: initialHours });
 
@@ -11,7 +16,17 @@ const RecordForm = ({ address, recordIndex, onSubmit, initialHours, onHourChange
       onHourChange(address, value);
     }
   };
+ 
 
+  const handleDateChange = (date) => {
+    // Actualizamos el formData con la nueva fecha, asegurándonos de que es un objeto Date
+    setFormData((prevData) => ({
+      ...prevData,
+      // Asegúrate de usar un nombre de propiedad que refleje correctamente lo que almacena,
+      // por ejemplo, fechaSeleccionada o algo más específico a tu caso de uso
+      [`row${recordIndex + 1}-col2`]: date
+    }));
+  }
   const diaNumber = recordIndex + 1;
 
   return (
@@ -23,23 +38,22 @@ const RecordForm = ({ address, recordIndex, onSubmit, initialHours, onHourChange
           id={`row${recordIndex + 1}-col1`}
           value={diaNumber}
           onChange={handleChange}
-          className="small-input"
+          className="small-input2"
         />
         <label htmlFor={`row${recordIndex + 1}-col2`}>Fecha</label>
-        <input
-          type="text"
-          id={`row${recordIndex + 1}-col2`}
-          value={formData.fecha}
-          onChange={handleChange}
+           <DatePicker
+          selected={formData[`row${recordIndex + 1}-col2`]}
+          onChange={handleDateChange}
           className="small-input"
+          dateFormat="MMM dd, yyyy"
         />
-        <label htmlFor={`row${recordIndex + 1}-col3`}>Hours</label>
+        <label htmlFor={`row${recordIndex + 1}-col3`}>Horas</label>
         <input
           type="text"
           id={`row${recordIndex + 1}-col3`}
           value={initialHours[address]}
           onChange={handleChange}
-          className="small-input"
+          className="small-input2"
         />
       </form>
     </div>
@@ -78,6 +92,7 @@ const App = () => {
     }
     setTotalHours(initialTotalHours);
   }, [hours, addresses, daysWorked]);
+
 
   return (
     <div id='form'>
@@ -122,6 +137,7 @@ const App = () => {
             type='text'
             id={`row1-col1`}
             value={totalHours[address] || 0}
+            className='small-input2'
           />
         </div>
       ))}

@@ -1,6 +1,12 @@
 .small-input{
-    width: 50px;
-
+    width: 80px;
+    font-weight: bold;
+    text-align-last:center;
+}
+.small-input2{
+    width: 10px;
+font-weight: bold;
+text-align-last:center;
 }
 
 .horasYDias{
