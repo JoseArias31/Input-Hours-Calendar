@@ -1,10 +1,7 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
-
 import DatePicker from "react-datepicker";
-
 import "react-datepicker/dist/react-datepicker.css";
-
 
 const RecordForm = ({ address, recordIndex, onSubmit, initialHours, onHourChange }) => {
   const [formData, setFormData] = useState({ dia: '', fecha: '', hours: initialHours });
@@ -17,17 +14,19 @@ const RecordForm = ({ address, recordIndex, onSubmit, initialHours, onHourChange
     }
   };
  
-
   const handleDateChange = (date) => {
-    // Actualizamos el formData con la nueva fecha, asegurándonos de que es un objeto Date
     setFormData((prevData) => ({
       ...prevData,
-      // Asegúrate de usar un nombre de propiedad que refleje correctamente lo que almacena,
-      // por ejemplo, fechaSeleccionada o algo más específico a tu caso de uso
       [`row${recordIndex + 1}-col2`]: date
     }));
   }
+
   const diaNumber = recordIndex + 1;
+
+  const isWeekday = (date) => {
+    const day = date.getDay();
+    return day !== 0 && day !== 6; // 0 = Sunday, 6 = Saturday
+  };
 
   return (
     <div key={`${address}-${recordIndex}`}>
@@ -41,11 +40,12 @@ const RecordForm = ({ address, recordIndex, onSubmit, initialHours, onHourChange
           className="small-input2"
         />
         <label htmlFor={`row${recordIndex + 1}-col2`}>Fecha</label>
-           <DatePicker
+        <DatePicker
           selected={formData[`row${recordIndex + 1}-col2`]}
           onChange={handleDateChange}
           className="small-input"
           dateFormat="MMM dd, yyyy"
+          filterDate={isWeekday}
         />
         <label htmlFor={`row${recordIndex + 1}-col3`}>Horas</label>
         <input
@@ -65,9 +65,8 @@ const App = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Manejar la lógica de envío de datos si es necesario
+    // Handle form submission logic if needed
   };
-
 
   const initialHours = {
     '131 Bermondsay Rd': '8',
@@ -77,7 +76,7 @@ const App = () => {
 
   const [hours, setHours] = useState(initialHours);
   const [totalHours, setTotalHours] = useState({});
-  const [daysWorked, setDaysWorked] = useState(20); // Usarás este estado para determinar el número de filas
+  const [daysWorked, setDaysWorked] = useState(20);
 
   const handleHourChange = (address, value) => {
     setHours((prevHours) => ({ ...prevHours, [address]: value }));
@@ -93,36 +92,35 @@ const App = () => {
     setTotalHours(initialTotalHours);
   }, [hours, addresses, daysWorked]);
 
-
   return (
     <div id='form'>
       {addresses.map((address) => (
         <div key={address}>
-            <h3 id='h3'>{address}</h3>
-           <div id='horasYDias'>
+          <h3 id='h3'>{address}</h3>
+          <div id='horasYDias'>
             <div>
-          <label htmlFor={`row1-col1`}>Hora por Oficina:</label>
-          <input
-            type="text"
-            id={`row1-col1`}
-            value={hours[address]}
-            className="small-input2"
-            onChange={(e) => {
-              handleHourChange(address, e.target.value);
-            }} />
+              <label htmlFor={`row1-col1`}>Hora por Oficina:</label>
+              <input
+                type="text"
+                id={`row1-col1`}
+                value={hours[address]}
+                className="small-input2"
+                onChange={(e) => {
+                  handleHourChange(address, e.target.value);
+                }} />
             </div>
             <div>
-          <label htmlFor={`days-worked-${address}`}>Dias trabajados:</label>
-          <input
-            type="number" // Cambia el tipo a number para facilitar el ingreso de valores numéricos
-            id={`days-worked-${address}`}
-            className='small-input2'
-            value={daysWorked}
-            onChange={(e) => setDaysWorked(Number(e.target.value))} // Asegúrate de convertir el valor a Number
-          />
+              <label htmlFor={`days-worked-${address}`}>Dias trabajados:</label>
+              <input
+                type="number"
+                id={`days-worked-${address}`}
+                className='small-input2'
+                value={daysWorked}
+                onChange={(e) => setDaysWorked(Number(e.target.value))}
+              />
+            </div>
           </div>
-          </div>
-          {Array.from({ length: daysWorked }, (_, recordIndex) => ( // Usa daysWorked para determinar el número de filas
+          {Array.from({ length: daysWorked }, (_, recordIndex) => (
             <RecordForm
               key={`${address}-${recordIndex}`}
               address={address}
@@ -132,7 +130,7 @@ const App = () => {
               onHourChange={handleHourChange}
             />
           ))}
-              <label htmlFor={`row1-col1`}>Total de Horas:</label>
+          <label htmlFor={`row1-col1`}>Total de Horas:</label>
           <input
             type='text'
             id={`row1-col1`}
